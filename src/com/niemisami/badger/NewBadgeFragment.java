@@ -11,7 +11,8 @@ public class NewBadgeFragment extends Fragment{
 
 	private Button archiveButton, newBadgeButton;
 	private ArchiveFragment archiveFragment;
-	private 
+	final static String ARG_POSITION ="position";
+	int fragmentID = 0;
 		
 		View view;
 	@Override

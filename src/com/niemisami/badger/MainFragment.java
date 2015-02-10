@@ -14,7 +14,7 @@ public class MainFragment extends Fragment{
 	private Button archiveButton, newBadgeButton;
 	
 	final static String ARG_POSITION ="position";
-	int currentPosition = -1;
+	int fragmentID = 0;
 		
 		View view;
 	@Override
@@ -31,7 +31,9 @@ public class MainFragment extends Fragment{
 		newBadgeButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onClick(View v) {						
+			public void onClick(View v) {
+
+				((MainActivity)getActivity()).changeFragment(2);
 			}
 		});
 		archiveButton = (Button)view.findViewById(R.id.archiveButton);
@@ -39,11 +41,9 @@ public class MainFragment extends Fragment{
 			
 			@Override
 			public void onClick(View v) {
-				((MainActivity)getActivity()).changeFragment();
+				((MainActivity)getActivity()).changeFragment(1);
 				}
 		});
-		
-		
 	}
 	
 	@Override 

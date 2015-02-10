@@ -10,14 +10,11 @@ public class ArchiveFragment extends Fragment {
 	private View view;
 
 	final static String ARG_POSITION = "position";
-	int currentPosition = -1;
+	int fragmentID = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
-		
-		System.out.println("jafasdjpfasdjpfoasdjfasdiofjasdioj");
-
 		view = inflater.inflate(R.layout.fragment_archive, container, false);
 		return view;
 	}
@@ -27,6 +24,6 @@ public class ArchiveFragment extends Fragment {
 		super.onSaveInstanceState(outState);
 
 		// Save the current article selection in case we need to recreate the fragment
-		outState.putInt(ARG_POSITION, currentPosition);
+		outState.putInt(ARG_POSITION, fragmentID);
 	}
 }

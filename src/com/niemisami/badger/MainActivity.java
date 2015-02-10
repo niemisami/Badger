@@ -17,24 +17,55 @@ public class MainActivity extends FragmentActivity {
 
 			MainFragment mainFragment = new MainFragment();
 			mainFragment.setArguments(getIntent().getExtras());
- 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_main,mainFragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.fragment_main,mainFragment).commit();
 		}
 	}
 
 
-	public void changeFragment(){
+	public void changeFragment(int fragmentID){
 
-
-		ArchiveFragment newArchiveFragment = new ArchiveFragment();
 		Bundle args = new Bundle();
-		args.putInt(ArchiveFragment.ARG_POSITION, -1);
-		newArchiveFragment.setArguments(args);
 		FragmentTransaction transcation = getSupportFragmentManager().beginTransaction();
-		
-		transcation.replace(R.id.fragment_main, newArchiveFragment);
-		transcation.addToBackStack(null);
-		transcation.commit();
-		
+
+		if(fragmentID == 1){
+			ArchiveFragment archiveFragment = (ArchiveFragment)
+					getSupportFragmentManager().findFragmentById(R.layout.fragment_archive);
+			if(archiveFragment != null){
+				
+			}
+			else{
+				ArchiveFragment newArchiveFragment = new ArchiveFragment();
+//				args.putInt(ArchiveFragment.ARG_POSITION, fragmentsPosition);
+//				newArchiveFragment.setArguments(args);
+				transcation.replace(R.id.fragment_main, newArchiveFragment);
+				transcation.addToBackStack(null);
+				transcation.commit();
+			}
+		}
+		else if(fragmentID == 2){
+			NewBadgeFragment badgeFragment = (NewBadgeFragment)
+					getSupportFragmentManager().findFragmentById(R.layout.fragment_badge);
+			if(badgeFragment != null){
+
+			}
+			else{
+				NewBadgeFragment newBadgeFragment = new NewBadgeFragment();
+				transcation.replace(R.id.fragment_main, newBadgeFragment);
+				transcation.addToBackStack(null);
+				transcation.commit();
+//				args.putInt(NewBadgeFragment.ARG_POSITION, fragmentsPosition);
+			}
+			
+
+		}
+		else if(fragmentID == 2){
+
+		}
+		else if(fragmentID == 3){
+
+		}
+
+
 	}
 
 
