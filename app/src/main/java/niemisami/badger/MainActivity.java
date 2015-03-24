@@ -51,6 +51,7 @@ public class MainActivity extends FragmentActivity {
 
     public void changeFragment(Fragment fragment, int fragmentID) {
 
+
 //        if (fragment.isVisible()) {
 //            return;
 //        }
