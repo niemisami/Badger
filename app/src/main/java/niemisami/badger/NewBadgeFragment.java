@@ -1,6 +1,10 @@
 package niemisami.badger;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.support.v4.app.Fragment;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by Sami on 27.2.2015.
@@ -34,6 +39,8 @@ public class NewBadgeFragment extends Fragment {
         currentFragment = this;
 
        initTimeField();
+
+
         return view;
 
     }
@@ -55,6 +62,23 @@ public class NewBadgeFragment extends Fragment {
         badgeTime.setToNow();
         timeEditText.setText(badgeTime.monthDay + "/" + badgeTime.yearDay + "/" + badgeTime.year );
 
+
+    }
+
+    private void startCamera(){
+
+        //Check for camera
+        Context context = getActivity();
+        PackageManager packageManager = context.getPackageManager();
+        if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false){
+            Toast.makeText(getActivity(), "This device does not have a camera.", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+
+        Intent addBadgeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        
 
     }
 

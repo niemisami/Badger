@@ -45,6 +45,8 @@ public class MainActivity extends FragmentActivity {
                     .hide(badgeFragment)
                     .add(R.id.fragmentContainer, mainFragment).commit();
             currentFragment = mainFragment;
+
+
         }
     }
 
