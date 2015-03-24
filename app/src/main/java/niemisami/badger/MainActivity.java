@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
 
 
 public class MainActivity extends FragmentActivity {
@@ -46,6 +47,8 @@ public class MainActivity extends FragmentActivity {
                     .add(R.id.fragmentContainer, mainFragment).commit();
             currentFragment = mainFragment;
         }
+
+
     }
 
 

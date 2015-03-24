@@ -53,7 +53,7 @@ public class NewBadgeFragment extends Fragment {
         timeEditText = (EditText)view.findViewById(R.id.badgeTime);
         badgeTime = new Time(Time.getCurrentTimezone());
         badgeTime.setToNow();
-        timeEditText.setText(badgeTime.monthDay + "/" + badgeTime.yearDay + "/" + badgeTime.year );
+        timeEditText.setText(badgeTime.monthDay + "/" + badgeTime.month + "/" + badgeTime.year );
 
 
     }
