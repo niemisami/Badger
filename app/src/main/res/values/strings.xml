@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!-- MainFragment -->
+<!-- BadgeListFragment -->
     <string name="app_name">Badger</string>
-    <string name="mainName">Merkkisäilö</string>
+    <string name="badgeListMainTitle">Merkkisäilö</string>
     <string name="newBadgeButton">+</string>
     <string name="addNewBadgeButton">Lisää</string>
     <string name="archiveButton">Arkisto</string>
    
-    <string name="newBadgeHead">Tallenna uusi merkki</string>
+    <string name="newBadgeTitle">Tallenna uusi merkki</string>
     <string name="newBadgeName">Nimi</string>
     <string name="newBadgeTime">Aika</string>
     <string name="newBadgePlace">Paikka</string>
     <string name="newBadgeInfo">Lisätiedot</string>
     <string name="newBadgeImage">Ota kuva</string>
     <string name="newBadgePrice">Hint</string>
-
-
-<!--   <string-array name="listItems">
-    	<item>Nimi</item>
-    	<item>Aika</item>
-    	<item>Paikka</item>
-    	<item>Hinta</item>
-    	<item>Lisätiedot</item>
-    	<item>Kuva</item>
-    </string-array> --> 
 
     <string name="list_item1">Nimi</string>
 	<string name="list_item2">Aika</string>

@@ -26,15 +26,13 @@ public class ArchiveFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_archive, container, false);
-
         currentFragment = this;
-
 
         returnButton = (Button)view.findViewById(R.id.returnFromArchiveButton);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).changeFragment(currentFragment, 0);
+
             }
         });
         return view;

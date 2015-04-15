@@ -44,7 +44,7 @@ public class NewBadgeFragment extends Fragment {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).changeFragment(currentFragment, 0);
+                ((MainActivity) getActivity()).changeFragment("derp");
             }
         });
     }
