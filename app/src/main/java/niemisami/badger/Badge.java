@@ -21,6 +21,7 @@ public class Badge {
 
     public Badge() {
         mId = UUID.randomUUID();
+        mDate = new Date();
     }
 
 

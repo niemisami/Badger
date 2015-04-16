@@ -25,6 +25,7 @@ public class BadgeManager {
 
     private BadgeManager(Context appContext) {
         mAppContext = appContext;
+        mBadges = new ArrayList<>();
 
 
 //        Generate few badges for testing
