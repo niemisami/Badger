@@ -25,7 +25,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class BadgeListFragment extends ListFragment {
@@ -121,7 +123,8 @@ public class BadgeListFragment extends ListFragment {
             nameTextView.setText(badge.getName());
             TextView dateTextView = (TextView) convertView.findViewById(R.id.badge_list_item_dateTextView);
             //          getDate() will return time in shitty form
-            dateTextView.setText(badge.getDate().toString());
+            String formattedTime = formatDate(badge);
+            dateTextView.setText(formattedTime);
 
             CheckBox attachedCheckBox = (CheckBox) convertView.findViewById(R.id.badge_list_item_attachedCheckBox);
             attachedCheckBox.setChecked(badge.getIsAttached());
@@ -130,5 +133,11 @@ public class BadgeListFragment extends ListFragment {
 
         }
 
+
+        public String formatDate(Badge badge){
+            String format = "dd-MM-yyyy";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+            return dateFormat.format(badge.getDate());
+        }
     }
 }

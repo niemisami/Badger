@@ -14,6 +14,7 @@ public class Badge {
     private String mName;
     private Date mDate;
     private Boolean mIsAttached;
+    private String mExtraInfo;
 
 //    Not yer sure if Photo will be saved to JSON or it is just a filename
 //      private Photo mPhoto;
@@ -52,4 +53,8 @@ public class Badge {
     public void setName(String mName) {
         this.mName = mName;
     }
+
+    public void setExtraInfo(String extraInfo){mExtraInfo = extraInfo;}
+
+    public String getExtraInfo(){return mExtraInfo;}
 }
