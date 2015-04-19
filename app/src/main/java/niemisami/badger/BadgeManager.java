@@ -47,6 +47,10 @@ public class BadgeManager {
     }
 
 
+    public void addBadge(Badge badge) {
+        mBadges.add(badge);
+    }
+
     public Badge getBadge(UUID id) {
         for(Badge badge : mBadges) {
             if(badge.getId().equals(id)) {

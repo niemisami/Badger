@@ -1,14 +1,17 @@
 package niemisami.badger;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by Sami on 18.4.2015.
  */
 public class BadgeDatabaseHelper extends SQLiteOpenHelper {
 
+    private static final String TAG = "BadgeDatabaseHelper";
     private static final String DB_NAME = "badges.sqlite";
     //    Version will be checked on upgrade or on downgrade of the db
     private static final int DB_VERSION = 1;
@@ -39,5 +42,20 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BADGE);
         onCreate(db);
+        Log.i(TAG, "Database upgraded from version: " + oldVersion + " to: " +  newVersion);
+    }
+
+
+    public long addBadgeToDb(Badge badge){
+//        Adding badge data to ContentValues
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_BADGE_ID, badge.getId().toString());
+        cv.put(COLUMN_BADGE_NAME, badge.getName());
+        cv.put(COLUMN_BADGE_DATE, badge.getDate().toString());
+        cv.put(COLUMN_BADGE_EXTRA, badge.getExtraInfo());
+        cv.put(COLUMN_BADGE_ATTACHED, badge.getIsAttached());
+
+//          Wrtigin to the database. 1. which table to save 2. cursor 3. ContentValue that holds the value key pairs
+        return getWritableDatabase().insert(TABLE_BADGE, null, cv);
     }
 }

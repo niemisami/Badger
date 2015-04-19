@@ -15,7 +15,7 @@ import android.widget.EditText;
 public class NewBadgeFragment extends Fragment {
 
     private Button archiveButton, newBadgeButton, returnButton;
-    private ArchiveFragment archiveFragment;
+//    private ArchiveFragment archiveFragment;
     final static String ARG_POSITION = "position";
     int fragmentID = 0;
     private Fragment currentFragment;

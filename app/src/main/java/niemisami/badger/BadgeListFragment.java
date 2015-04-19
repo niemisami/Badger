@@ -6,6 +6,7 @@ package niemisami.badger;
  * and provides many useful functions
  */
 
+import android.content.Intent;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.widget.AbsListView;
@@ -67,6 +68,18 @@ public class BadgeListFragment extends ListFragment {
 //        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         return view;
     }
+
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Badge selectedBadge = ((BadgeAdapter) getListAdapter()).getItem(position);
+
+        Intent i = new Intent(getActivity(), BadgeActivity.class);
+        i.putExtra(BadgeFragment.EXTRA_BADGE_ID, selectedBadge.getId());
+        startActivity(i);
+    }
+
 
 
     @Override
@@ -132,6 +145,8 @@ public class BadgeListFragment extends ListFragment {
             return convertView;
 
         }
+
+
 
 
         public String formatDate(Badge badge){
