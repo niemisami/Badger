@@ -3,14 +3,12 @@
     android:id="@+id/fragment_badge"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
-        android:layout_weight="0">
+        android:layout_margin="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,6 +23,7 @@
                 android:textSize="20sp" />
 
             <EditText
+                android:id="@+id/badgeName_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp" />
@@ -54,7 +53,11 @@
         </LinearLayout>
     </LinearLayout>
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,8 +65,11 @@
         android:textSize="20sp" />
 
      <Button
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content" />
+         android:id="@+id/badgeDate_button"
+         android:layout_gravity="center"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:drawableLeft="@drawable/perm_group_system_clock"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -72,30 +78,28 @@
         android:textSize="20sp" />
 
     <EditText
+        android:id="@+id/badge_extraInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp" />
+
+    </LinearLayout>
 
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <Button
+        <ImageButton
             android:id="@+id/newBardgeButton"
             android:layout_gravity="bottom|end"
-            android:layout_margin="30dp"
+            android:layout_margin="16dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:text="@string/newBadgeButton"
             android:textSize="30sp"
-            android:textColor="#FFF"
             android:background="@drawable/circle"
+            android:src="@drawable/ic_check"
             />
-        </FrameLayout>>
-
-
-
-
+        </FrameLayout>
 </LinearLayout>
 
 

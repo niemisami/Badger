@@ -8,6 +8,23 @@
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/newBardgeButton"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:text="@string/newBadgeButton"
+            android:textSize="30sp"
+            android:textColor="#FFF"
+            android:background="@drawable/circle"
+            />
+    </FrameLayout>
     <FrameLayout
         android:id="@android:id/empty"
         android:layout_width="match_parent"

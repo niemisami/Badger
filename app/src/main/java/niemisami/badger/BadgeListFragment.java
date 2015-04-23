@@ -34,7 +34,7 @@ import java.util.Date;
 public class BadgeListFragment extends ListFragment {
 
     private String TAG = "BadgeListFragment";
-    private Button archiveButton, newBadgeButton;
+    private Button mNewBadgeButton;
 
     private ArrayList<Badge> mBadges;
 
@@ -66,6 +66,21 @@ public class BadgeListFragment extends ListFragment {
 
         ListView listView = (ListView)view.findViewById(android.R.id.list);
 //        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+        mNewBadgeButton = (Button)view.findViewById(R.id.newBardgeButton);
+
+//        Press of a button creates new Badge and opens the empty BadgeFragment
+        mNewBadgeButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Badge badge = new Badge();
+                BadgeManager.get((getActivity())).addBadge(badge);
+
+                Intent i = new Intent(getActivity(), BadgeActivity.class);
+                i.putExtra(BadgeFragment.EXTRA_BADGE_ID, badge.getId());
+                startActivity(i);
+            }
+        });
         return view;
     }
 

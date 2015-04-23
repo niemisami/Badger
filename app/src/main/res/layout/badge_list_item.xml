@@ -2,33 +2,49 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/background_activated">
     <CheckBox
         android:id="@+id/badge_list_item_attachedCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:gravity="center"
         android:enabled="false"
         android:focusable="false"
-        android:padding="15dp"/>
-    <TextView
-        android:id="@+id/badge_list_item_dateTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Date"
-        android:padding="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="50dp"/>
+    <ImageView
+        android:id="@+id/badge_list_item_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:src="@android:drawable/ic_menu_camera"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="13dp"
         />
     <TextView
         android:id="@+id/badge_list_item_nameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/badge_list_item_attachedCheckBox"
+        android:layout_toRightOf="@id/badge_list_item_image"
         android:textStyle="bold"
         android:text="Name"
-        android:padding="15dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
         />
+    <TextView
+        android:id="@+id/badge_list_item_dateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/badge_list_item_nameText"
+        android:layout_toLeftOf="@id/badge_list_item_attachedCheckBox"
+        android:layout_toRightOf="@id/badge_list_item_image"
+        android:text="Date"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        />
+
+
 
 </RelativeLayout>
