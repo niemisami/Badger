@@ -1,7 +1,9 @@
 package niemisami.badger;
 
 import android.content.Context;
+import android.util.Log;
 
+import java.sql.SQLDataException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -21,21 +23,32 @@ public class BadgeManager {
 //    resources and storage
     private Context mAppContext;
     private ArrayList<Badge> mBadges;
+    private BadgeDatabaseHelper dbHelper;
 
 
     private BadgeManager(Context appContext) {
         mAppContext = appContext;
         mBadges = new ArrayList<>();
+        dbHelper = new BadgeDatabaseHelper(mAppContext);
 
-
-//        Generate few badges for testing
-        for(int i = 0; i < 10; i++){
-            Badge b = new Badge();
-            b.setName("Merkki #" + i);
-//           attached odd and and not attached even
-            b.setIsAttached(i % 2 == 0);
-            mBadges.add(b);
+        try {
+            mBadges = dbHelper.getBadgesFromDb();
+            Log.d(TAG, Integer.toString(mBadges.size()) + " amount of badges from db");
+        } catch(SQLDataException e) {
+            Log.e(TAG, "Error loading from database: ", e);
         }
+
+        Log.d(TAG, mBadges.get(0).getDate().toString());
+
+
+////        Generate few badges for testing
+//        for(int i = 0; i < 10; i++){
+//            Badge b = new Badge();
+//            b.setName("Merkki #" + i);
+////           attached odd and and not attached even
+//            b.setIsAttached(i % 2 == 0);
+//            mBadges.add(b);
+//        }
     }
 
 //    get(Context) will check if BadgeManager has an instance created already
@@ -47,9 +60,12 @@ public class BadgeManager {
     }
 
 
+//    public boolean saveBadges(){} ;
+
     public void addBadge(Badge badge) {
         mBadges.add(badge);
     }
+
 
     public Badge getBadge(UUID id) {
         for(Badge badge : mBadges) {
@@ -63,4 +79,10 @@ public class BadgeManager {
     public ArrayList<Badge> getBadges() {
         return mBadges;
     }
+
+    public boolean saveBadges() {
+        dbHelper.saveBadgesToDb(mBadges);
+        return false;
+    }
 }
+

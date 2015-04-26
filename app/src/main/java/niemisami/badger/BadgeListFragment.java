@@ -114,10 +114,11 @@ public class BadgeListFragment extends ListFragment {
         super.onPause();
     }
 
+    //    Action when back button is pressed
     @Override
     public void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
+        ((BadgeAdapter)getListAdapter()).notifyDataSetChanged();
     }
 
     @Override
@@ -138,24 +139,27 @@ public class BadgeListFragment extends ListFragment {
             super(getActivity(), 0, badges);
         }
 
+
+//        getView inflates the view by using badge_list_item layout for every item
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
                         .inflate(R.layout.badge_list_item, null);
             }
+            if(getItem(position) != null) {
+                Badge badge = getItem(position);
 
-            Badge badge = getItem(position);
+                TextView nameTextView = (TextView) convertView.findViewById(R.id.badge_list_item_nameText);
+                nameTextView.setText(badge.getName());
+                TextView dateTextView = (TextView) convertView.findViewById(R.id.badge_list_item_dateTextView);
+                //          getDate() will return time in shitty form
+                String formattedTime = formatDate(badge);
+                dateTextView.setText(formattedTime);
 
-            TextView nameTextView = (TextView) convertView.findViewById(R.id.badge_list_item_nameText);
-            nameTextView.setText(badge.getName());
-            TextView dateTextView = (TextView) convertView.findViewById(R.id.badge_list_item_dateTextView);
-            //          getDate() will return time in shitty form
-            String formattedTime = formatDate(badge);
-            dateTextView.setText(formattedTime);
-
-            CheckBox attachedCheckBox = (CheckBox) convertView.findViewById(R.id.badge_list_item_attachedCheckBox);
-            attachedCheckBox.setChecked(badge.getIsAttached());
+                CheckBox attachedCheckBox = (CheckBox) convertView.findViewById(R.id.badge_list_item_attachedCheckBox);
+                attachedCheckBox.setChecked(badge.getIsAttached());
+            }
 
             return convertView;
 

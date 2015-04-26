@@ -13,7 +13,7 @@ public class Badge {
     private UUID mId;
     private String mName;
     private Date mDate;
-    private Boolean mIsAttached;
+    private boolean mIsAttached;
     private String mExtraInfo;
 
 //    Not yer sure if Photo will be saved to JSON or it is just a filename
@@ -25,8 +25,12 @@ public class Badge {
         mDate = new Date();
     }
 
+    public Badge(UUID id) {
+        mId = id;
+    }
 
-    public Boolean getIsAttached() {
+
+    public boolean getIsAttached() {
         return mIsAttached;
     }
 

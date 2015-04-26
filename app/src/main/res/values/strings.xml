@@ -16,14 +16,9 @@
     <string name="newBadgePlace">Paikka</string>
     <string name="newBadgeInfo">Lisätiedot</string>
     <string name="newBadgeImage">Ota kuva</string>
-    <string name="newBadgePrice">Hint</string>
+    <string name="newBadgeAttached">Kiinnitetty</string>
 
-    <string name="list_item1">Nimi</string>
-	<string name="list_item2">Aika</string>
-    <string name="list_item3">Paikka</string>
-    <string name="list_item4">Hinta</string>
-    <string name="list_item5">Lisätiedot</string>
-	<string name="list_item6">Kuva</string>
+
    
 <!-- BadgeFragment -->
     <string name="badgeFragHead">Tallenna</string>

@@ -67,7 +67,7 @@ public class DatePickerFragment extends DialogFragment {
             }
         });
 
-        AlertDialog alertDialogDatePicker =new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(getActivity())
                 .setView(v)
                 .setTitle("Merkin päivä")
                 .setPositiveButton(
@@ -80,7 +80,7 @@ public class DatePickerFragment extends DialogFragment {
                         })
                 .create();
 
-        return alertDialogDatePicker;
+
     }
 
     private void sendResult(int resultCode){
