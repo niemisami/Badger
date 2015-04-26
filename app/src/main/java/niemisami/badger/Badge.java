@@ -9,12 +9,14 @@ import java.util.UUID;
 public class Badge {
 
 
-//    UUID is Universally Unique Identifier, which will work as a badge identification
+    //    UUID is Universally Unique Identifier, which will work as a badge identification
     private UUID mId;
     private String mName;
     private Date mDate;
     private boolean mIsAttached;
     private String mExtraInfo;
+    //    mPhoto is only a filename/path of the image
+    private String mPhoto;
 
 //    Not yer sure if Photo will be saved to JSON or it is just a filename
 //      private Photo mPhoto;
@@ -58,7 +60,19 @@ public class Badge {
         this.mName = mName;
     }
 
-    public void setExtraInfo(String extraInfo){mExtraInfo = extraInfo;}
+    public void setExtraInfo(String extraInfo) {
+        mExtraInfo = extraInfo;
+    }
 
-    public String getExtraInfo(){return mExtraInfo;}
+    public String getExtraInfo() {
+        return mExtraInfo;
+    }
+
+    public String getPhoto() {
+        return mPhoto;
+    }
+
+    public void setPhoto(String photo) {
+        this.mPhoto = photo;
+    }
 }

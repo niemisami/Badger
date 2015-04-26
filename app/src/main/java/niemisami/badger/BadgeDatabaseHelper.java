@@ -34,6 +34,7 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_BADGE_DATE = "date";
     private static final String COLUMN_BADGE_EXTRA = "extra_info";
     private static final String COLUMN_BADGE_ATTACHED = "is_attached";
+    private static final String COLUMN_BADGE_PHOTO_PATH = "photo_filename";
 
     public BadgeDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -47,7 +48,8 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
                         + COLUMN_BADGE_NAME + " STRING, "
                         + COLUMN_BADGE_DATE + " STRING, "
                         + COLUMN_BADGE_ATTACHED + " BOOLEAN DEFAULT FALSE, "
-                        + COLUMN_BADGE_EXTRA + " STRING)");
+                        + COLUMN_BADGE_EXTRA + " STRING, "
+                        + COLUMN_BADGE_PHOTO_PATH + " STRING)");
     }
 
     @Override
@@ -64,7 +66,7 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
 
 //        With transaction some other resource can use the same thread that the sqlite is using.
 //        This gathers all the insertions to the database and then commits it in finally block
-//        yiealdIfContendedSafely allows other resources to use the thread.
+//        yieldIfContendedSafely allows other resources to use the thread.
         db.beginTransaction();
         try {
             for (Badge badge : badges) {
@@ -74,6 +76,7 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
                 cv.put(COLUMN_BADGE_DATE, badge.getDate().toString());
                 cv.put(COLUMN_BADGE_EXTRA, badge.getExtraInfo());
                 cv.put(COLUMN_BADGE_ATTACHED, badge.getIsAttached());
+                cv.put(COLUMN_BADGE_PHOTO_PATH, badge.getPhoto());
 
 //          Writing to the database. 1. which table to save 2. cursor 3. ContentValue that holds the value key pairs
 

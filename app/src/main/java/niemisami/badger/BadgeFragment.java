@@ -45,7 +45,7 @@ public class BadgeFragment extends Fragment {
     private EditText mExtraInfoField;
     private CheckBox mAttachedCheckBox;
     private ImageButton mAddBadgeButton;
-    private ImageButton mTakePhotoButton;
+    private ImageButton mPhotoButton;
     private ImageView mPhotoView;
 
     private Badge mBadge;
@@ -53,6 +53,7 @@ public class BadgeFragment extends Fragment {
 
     public static final String EXTRA_BADGE_ID = "badger.badgeid";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_PHOTO = 1;
     private static final String DIALOG_DATE = "date";
 
     public BadgeFragment() {
@@ -106,6 +107,16 @@ public class BadgeFragment extends Fragment {
             }
         });
 
+
+//        Button to start CameraActivity/Fragment
+        mPhotoButton = (ImageButton)view.findViewById(R.id.badge_PhotoButton);
+        mPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), CameraActivity.class);
+                startActivityForResult(i, REQUEST_PHOTO);
+            }
+        });
 
 //        Button to show calendar for the user
         mDateButton = (Button) view.findViewById(R.id.badgeDate_button);
