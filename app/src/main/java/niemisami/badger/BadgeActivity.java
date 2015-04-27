@@ -37,6 +37,8 @@ public class BadgeActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        BadgeFragment fragment = (BadgeFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_badge);
+        fragment.setWorkDoneAndExit();
         overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
 
     }

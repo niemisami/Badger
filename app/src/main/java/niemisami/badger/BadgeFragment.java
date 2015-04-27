@@ -256,4 +256,14 @@ public class BadgeFragment extends Fragment {
         }
     }
 
+
+
+//  TODO implement ths method to other places, onPause, add buttons onClickListener
+    public void setWorkDoneAndExit() {
+        if (NavUtils.getParentActivityName(getActivity()) != null) {
+            NavUtils.navigateUpFromSameTask(getActivity());
+        }
+
+        BadgeManager.get(getActivity()).saveBadges();
+    }
 }
