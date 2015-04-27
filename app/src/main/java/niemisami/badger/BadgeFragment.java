@@ -4,12 +4,15 @@ package niemisami.badger;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,7 +76,7 @@ public class BadgeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         UUID badgeId = (UUID) getArguments().getSerializable(EXTRA_BADGE_ID);
         mBadge = BadgeManager.get(getActivity()).getBadge(badgeId);
-//        VAIN TESTIÄ VARTEN
+
         setHasOptionsMenu(true);
     }
 
@@ -109,7 +112,7 @@ public class BadgeFragment extends Fragment {
 
 
 //        Button to start CameraActivity/Fragment
-        mPhotoButton = (ImageButton)view.findViewById(R.id.badge_PhotoButton);
+        mPhotoButton = (ImageButton) view.findViewById(R.id.badge_PhotoButton);
         mPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +120,13 @@ public class BadgeFragment extends Fragment {
                 startActivityForResult(i, REQUEST_PHOTO);
             }
         });
+
+        PackageManager pm = getActivity().getPackageManager();
+        boolean hasCamera = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA) || pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)
+                || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && Camera.getNumberOfCameras() > 0);
+        if (!hasCamera) {
+            mPhotoButton.setEnabled(false);
+        }
 
 //        Button to show calendar for the user
         mDateButton = (Button) view.findViewById(R.id.badgeDate_button);
@@ -163,6 +173,32 @@ public class BadgeFragment extends Fragment {
             }
         });
 
+
+        mAddBadgeButton = (ImageButton) view.findViewById(R.id.newBardgeButton);
+
+//        TODO clean this part and last method onPause
+        mAddBadgeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(mNameField.getText().toString())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Merkkiä ei tallennettu! Kirjoita nimi", Toast.LENGTH_SHORT).show();
+                    for (int i = 0; i < BadgeManager.get(getActivity()).getBadges().size(); i++) {
+                        if (BadgeManager.get(getActivity()).getBadges().get(i).getId() == mBadge.getId()) {
+                            BadgeManager.get(getActivity()).getBadges().remove(i);
+                        }
+                    }
+                } else{
+                    Log.v(TAG, "onPause called and item saved");
+                    Toast.makeText(getActivity().getApplicationContext(), "Merkki tallennettu!", Toast.LENGTH_SHORT).show();
+                    if (NavUtils.getParentActivityName(getActivity()) != null) {
+                        NavUtils.navigateUpFromSameTask(getActivity());
+                    }
+
+                    BadgeManager.get(getActivity()).saveBadges();
+                }
+            }
+        });
+
         return view;
     }
 
@@ -206,7 +242,7 @@ public class BadgeFragment extends Fragment {
 
 //        This is for debugging and will be handled somewhere else
         if (!mNameField.getText().toString().matches("")) {
-            Log.v(TAG, "Item saved");
+            Log.v(TAG, "onPause called and item saved");
             BadgeManager.get(getActivity()).saveBadges();
             Toast.makeText(getActivity().getApplicationContext(), "Merkki tallennettu!", Toast.LENGTH_SHORT).show();
 
@@ -219,4 +255,5 @@ public class BadgeFragment extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(), "Merkkiä ei tallennettu!", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

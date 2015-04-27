@@ -48,8 +48,8 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
                         + COLUMN_BADGE_NAME + " STRING, "
                         + COLUMN_BADGE_DATE + " STRING, "
                         + COLUMN_BADGE_ATTACHED + " BOOLEAN DEFAULT FALSE, "
-                        + COLUMN_BADGE_EXTRA + " STRING, "
-                        + COLUMN_BADGE_PHOTO_PATH + " STRING)");
+                        + COLUMN_BADGE_EXTRA + " STRING)");
+//                        + COLUMN_BADGE_PHOTO_PATH + " STRING)");
     }
 
     @Override
@@ -76,7 +76,7 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
                 cv.put(COLUMN_BADGE_DATE, badge.getDate().toString());
                 cv.put(COLUMN_BADGE_EXTRA, badge.getExtraInfo());
                 cv.put(COLUMN_BADGE_ATTACHED, badge.getIsAttached());
-                cv.put(COLUMN_BADGE_PHOTO_PATH, badge.getPhoto());
+//                cv.put(COLUMN_BADGE_PHOTO_PATH, badge.getPhoto());
 
 //          Writing to the database. 1. which table to save 2. cursor 3. ContentValue that holds the value key pairs
 
@@ -117,7 +117,7 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
 //            Log.d(TAG, dateString + "EEE MMM dd hh:mm:ss zzz yyyy");
             try {
                 Date date = formatOfDate.parse(dateString);
-                Log.d(TAG, date.toString());
+//                Log.d(TAG, date.toString());
                 badge.setDate(date);
             } catch (ParseException e) {
                 Log.e(TAG, "Error while parsing date", e);

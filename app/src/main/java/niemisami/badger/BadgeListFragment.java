@@ -6,8 +6,12 @@ package niemisami.badger;
  * and provides many useful functions
  */
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.support.v4.app.ListFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -35,6 +39,7 @@ public class BadgeListFragment extends ListFragment {
 
     private String TAG = "BadgeListFragment";
     private Button mNewBadgeButton;
+    private TextView mBadgeListInfo;
 
     private ArrayList<Badge> mBadges;
 
@@ -46,7 +51,7 @@ public class BadgeListFragment extends ListFragment {
         getActivity().setTitle(R.string.badgeListMainTitle);
 
 //        get(..) created the BadgeManager withing it's class if run first time
-        mBadges = BadgeManager.get(getActivity()).getBadges();
+        mBadges = receiveBadgesArray();
 
         BadgeAdapter adapter = new BadgeAdapter(mBadges);
         setListAdapter(adapter);
@@ -64,11 +69,14 @@ public class BadgeListFragment extends ListFragment {
 
         View view = inflater.inflate(R.layout.fragment_badge_list, container, false);
 
-        ListView listView = (ListView)view.findViewById(android.R.id.list);
+        ListView listView = (ListView) view.findViewById(android.R.id.list);
 //        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
-        mNewBadgeButton = (Button)view.findViewById(R.id.newBardgeButton);
+//        TextView that tell to the user how many badges is saved and attached
+        mBadgeListInfo = (TextView) view.findViewById(R.id.badge_list_info);
+        countBadges();
 
+        mNewBadgeButton = (Button) view.findViewById(R.id.newBardgeButton);
 //        Press of a button creates new Badge and opens the empty BadgeFragment
         mNewBadgeButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -85,6 +93,8 @@ public class BadgeListFragment extends ListFragment {
     }
 
 
+
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
@@ -96,10 +106,14 @@ public class BadgeListFragment extends ListFragment {
     }
 
 
-
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
     }
 
     @Override
@@ -118,8 +132,10 @@ public class BadgeListFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((BadgeAdapter)getListAdapter()).notifyDataSetChanged();
+        countBadges();
+        ((BadgeAdapter) getListAdapter()).notifyDataSetChanged();
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -140,14 +156,14 @@ public class BadgeListFragment extends ListFragment {
         }
 
 
-//        getView inflates the view by using badge_list_item layout for every item
+        //        getView inflates the view by using badge_list_item layout for every item
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
                         .inflate(R.layout.badge_list_item, null);
             }
-            if(getItem(position) != null) {
+            if (getItem(position) != null) {
                 Badge badge = getItem(position);
 
                 TextView nameTextView = (TextView) convertView.findViewById(R.id.badge_list_item_nameText);
@@ -166,12 +182,37 @@ public class BadgeListFragment extends ListFragment {
         }
 
 
-
-
-        public String formatDate(Badge badge){
+        public String formatDate(Badge badge) {
             String format = "dd-MM-yyyy";
             SimpleDateFormat dateFormat = new SimpleDateFormat(format);
             return dateFormat.format(badge.getDate());
         }
     }
+
+    public ArrayList<Badge> receiveBadgesArray() {
+        return BadgeManager.get(getActivity()).getBadges();
+    }
+
+
+
+    public void countBadges() {
+        mBadges = receiveBadgesArray();
+        int badgeCount = mBadges.size();
+        int attachedCount = 0;
+        for (Badge badge : mBadges) {
+            if (badge.getIsAttached())
+                attachedCount++;
+        }
+
+        Log.d(TAG, "new attach count " + attachedCount);
+        String infoText = mBadgeListInfo.getText().toString();
+
+//        chars # and % are found in @string resource and method replaces them with integers
+        infoText = infoText.replace("#", Integer.toString(badgeCount));
+        infoText = infoText.replace("%", Integer.toString(attachedCount));
+
+        mBadgeListInfo.setText(infoText);
+
+    }
+
 }

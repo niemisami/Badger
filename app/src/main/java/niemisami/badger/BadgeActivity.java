@@ -15,19 +15,30 @@ public class BadgeActivity extends FragmentActivity {
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentById(R.id.fragmentContainer);
 
-        if(fragment == null){
-            UUID badgeId = (UUID)getIntent().getSerializableExtra(BadgeFragment.EXTRA_BADGE_ID);
+
+        overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
+
+
+        if (fragment == null) {
+            UUID badgeId = (UUID) getIntent().getSerializableExtra(BadgeFragment.EXTRA_BADGE_ID);
             fragment = BadgeFragment.newInstance(badgeId);
             manager.beginTransaction()
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
+
     }
 
     private Fragment createFragment() {

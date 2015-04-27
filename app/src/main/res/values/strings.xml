@@ -9,7 +9,8 @@
     <string name="archiveButton">Arkisto</string>
     <string name="empty_list">Sinulla ei ole yhtään merkkiä\nLisääppäs!</string>
 
-   
+
+    <string name="listBadgeInfo">Sinulla on # merkkiä, joista kiinni % </string>
     <string name="newBadgeTitle">Tallenna uusi merkki</string>
     <string name="newBadgeName">Nimi</string>
     <string name="newBadgeTime">Aika</string>

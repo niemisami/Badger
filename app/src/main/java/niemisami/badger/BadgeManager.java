@@ -11,7 +11,7 @@ import java.util.UUID;
  * Created by Sami on 15.4.2015.
  * Badge manager is Singleton class. So it has only one instance at all times
  * when app stays in device's menory
- *
+ * <p/>
  * BadgeManager will handle sharing all the data of single badge
  */
 public class BadgeManager {
@@ -19,7 +19,7 @@ public class BadgeManager {
     private static BadgeManager sBadgeManager;
     private static final String TAG = "BadgeManager";
 
-//    Context allows class to get access activities,
+    //    Context allows class to get access activities,
 //    resources and storage
     private Context mAppContext;
     private ArrayList<Badge> mBadges;
@@ -29,17 +29,8 @@ public class BadgeManager {
     private BadgeManager(Context appContext) {
         mAppContext = appContext;
         mBadges = new ArrayList<>();
-        dbHelper = new BadgeDatabaseHelper(mAppContext);
 
-        try {
-            mBadges = dbHelper.getBadgesFromDb();
-            Log.d(TAG, Integer.toString(mBadges.size()) + " amount of badges from db");
-        } catch(SQLDataException e) {
-            Log.e(TAG, "Error loading from database: ", e);
-        }
-
-        Log.d(TAG, mBadges.get(0).getDate().toString());
-
+        mBadges = getBadgesFromDb();
 
 ////        Generate few badges for testing
 //        for(int i = 0; i < 10; i++){
@@ -51,7 +42,7 @@ public class BadgeManager {
 //        }
     }
 
-//    get(Context) will check if BadgeManager has an instance created already
+    //    get(Context) will check if BadgeManager has an instance created already
     public static BadgeManager get(Context context) {
         if (sBadgeManager == null) {
             sBadgeManager = new BadgeManager(context.getApplicationContext());
@@ -68,8 +59,8 @@ public class BadgeManager {
 
 
     public Badge getBadge(UUID id) {
-        for(Badge badge : mBadges) {
-            if(badge.getId().equals(id)) {
+        for (Badge badge : mBadges) {
+            if (badge.getId().equals(id)) {
                 return badge;
             }
         }
@@ -77,12 +68,26 @@ public class BadgeManager {
     }
 
     public ArrayList<Badge> getBadges() {
+        mBadges = getBadgesFromDb();
         return mBadges;
     }
 
     public boolean saveBadges() {
         dbHelper.saveBadgesToDb(mBadges);
         return false;
+    }
+
+    private ArrayList<Badge> getBadgesFromDb() {
+        dbHelper = new BadgeDatabaseHelper(mAppContext);
+        ArrayList<Badge> badges = new ArrayList<>();
+        try {
+            badges = dbHelper.getBadgesFromDb();
+//            Log.d(TAG, Integer.toString(mBadges.size()) + " amount of badges from db");
+        } catch (SQLDataException e) {
+            Log.e(TAG, "Error loading from database: ", e);
+        }
+
+        return badges;
     }
 }
 

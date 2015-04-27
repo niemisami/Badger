@@ -20,7 +20,7 @@
             android:src="@android:drawable/ic_menu_camera"/>
         </LinearLayout>
     <FrameLayout
-        android:id="@+id/crime_camera_progressContainer"
+        android:id="@+id/camera_progressContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true" >
