@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.UUID;
 
@@ -36,11 +37,16 @@ public class BadgeActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        BadgeFragment fragment = (BadgeFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_badge);
-        fragment.setWorkDoneAndExit();
-        overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
 
+        FragmentManager manager = getSupportFragmentManager();
+        BadgeFragment fragment = (BadgeFragment) manager.findFragmentById(R.id.fragmentContainer);
+        if (fragment != null) {
+            fragment.setWorkDoneAndExit();
+        } else
+            super.onBackPressed();
+
+
+        overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
     }
 
     private Fragment createFragment() {

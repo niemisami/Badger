@@ -71,6 +71,7 @@ public class BadgeFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -257,13 +258,19 @@ public class BadgeFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
 
-//  TODO implement ths method to other places, onPause, add buttons onClickListener
+    }
+
+    //  TODO implement ths method to other places, onPause, add buttons onClickListener
     public void setWorkDoneAndExit() {
+        BadgeManager.get(getActivity()).saveBadges();
+
         if (NavUtils.getParentActivityName(getActivity()) != null) {
             NavUtils.navigateUpFromSameTask(getActivity());
         }
 
-        BadgeManager.get(getActivity()).saveBadges();
     }
 }
