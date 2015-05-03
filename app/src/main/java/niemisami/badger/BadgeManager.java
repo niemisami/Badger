@@ -90,8 +90,13 @@ public class BadgeManager {
         } catch (SQLDataException e) {
             Log.e(TAG, "Error loading from database: ", e);
         }
+        dbHelper.close();
 
         return badges;
+    }
+
+    public void closeDb() {
+        dbHelper.close();
     }
 }
 

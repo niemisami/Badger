@@ -8,11 +8,18 @@ package niemisami.badger;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.LruCache;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,6 +41,7 @@ import org.w3c.dom.Text;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 
 public class BadgeListFragment extends ListFragment {
@@ -40,8 +49,8 @@ public class BadgeListFragment extends ListFragment {
     private String TAG = "BadgeListFragment";
     private Button mNewBadgeButton;
     private TextView mBadgeListInfo;
-
     private ArrayList<Badge> mBadges;
+    private ThumbnailCache mThumbnailCache;
 
 
     @Override
@@ -55,6 +64,10 @@ public class BadgeListFragment extends ListFragment {
 
         BadgeAdapter adapter = new BadgeAdapter(mBadges);
         setRetainInstance(true);
+
+        int memClass = ((ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+        final int cacheSize = 1024 * 1024 * memClass / 8;
+        mThumbnailCache = new ThumbnailCache(cacheSize);
         setListAdapter(adapter);
 
 
@@ -95,8 +108,6 @@ public class BadgeListFragment extends ListFragment {
     }
 
 
-
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
@@ -120,13 +131,14 @@ public class BadgeListFragment extends ListFragment {
 
     @Override
     public void onDestroy() {
-        // TODO Auto-generated method stub
-        super.onDestroy();
+        BadgeManager.get(getActivity()).closeDb();
+        super.onDestroyView();
     }
 
     @Override
     public void onPause() {
-        // TODO Auto-generated method stub
+        Log.d(TAG, "view paused");
+
         super.onPause();
     }
 
@@ -177,11 +189,66 @@ public class BadgeListFragment extends ListFragment {
 
                 CheckBox attachedCheckBox = (CheckBox) convertView.findViewById(R.id.badge_list_item_attachedCheckBox);
                 attachedCheckBox.setChecked(badge.getIsAttached());
-            }
 
+                ImageView badgeThumbnail = (ImageView) convertView.findViewById(R.id.badge_list_item_image);
+                String photo = badge.getPhoto();
+
+
+                if (photo != null) {
+                    if (mThumbnailCache.get(photo) != null) {
+                        badgeThumbnail.setImageBitmap(mThumbnailCache.get(photo));
+                    } else {
+                        Bitmap thumbnail = createThumbnail(photo);
+                        badgeThumbnail.setImageBitmap(thumbnail);
+                        mThumbnailCache.put(photo, thumbnail);
+                    }
+                }
+
+            }
             return convertView;
 
         }
+
+        private Bitmap createThumbnail(String photo) {
+            String path = getActivity().getFileStreamPath(photo).getAbsolutePath();
+//                    new LoadImage(badgeThumbnail, path).execute();
+            Bitmap thumbnail = null;
+            if (!path.isEmpty()) {
+                thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path), 64, 64);
+            }
+
+            return thumbnail;
+
+        }
+
+//
+//        //        Takes two objects in constructor ImageView and photo path
+//        private class LoadImage extends AsyncTask<Object, Void, Bitmap> {
+//
+//            private ImageView thumbnailView;
+//            private String path;
+//
+//            public LoadImage(ImageView thumbnailView, String path) {
+//                this.thumbnailView = thumbnailView;
+//                this.path = path;
+//            }
+//
+//            @Override
+//            protected Bitmap doInBackground(Object... params) {
+//                Bitmap thumbnail = null;
+//                if (!path.isEmpty()) {
+//                    thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path), 64, 64);
+//                }
+//                return thumbnail;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Bitmap bitmap) {
+//                if (bitmap != null && thumbnailView != null) {
+//                    thumbnailView.setImageBitmap(bitmap);
+//                }
+//            }
+//        }
 
 
         public String formatDate(Badge badge) {
@@ -194,7 +261,6 @@ public class BadgeListFragment extends ListFragment {
     public ArrayList<Badge> receiveBadgesArray() {
         return BadgeManager.get(getActivity()).getBadges();
     }
-
 
 
     public void countBadges() {
@@ -213,7 +279,22 @@ public class BadgeListFragment extends ListFragment {
         infoText = infoText.replace("%", Integer.toString(attachedCount));
 
         mBadgeListInfo.setText(infoText);
+    }
+
+
+    //    Cache for saving thumbnail images
+    public class ThumbnailCache extends LruCache<String, Bitmap> {
+
+        public ThumbnailCache(int maxSizeBytes) {
+            super(maxSizeBytes);
+        }
+
+        @Override
+        protected int sizeOf(String key, Bitmap value) {
+            return value.getByteCount();
+        }
 
     }
+
 
 }

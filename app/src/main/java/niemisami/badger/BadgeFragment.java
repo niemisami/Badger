@@ -320,6 +320,13 @@ public class BadgeFragment extends Fragment {
         showPhoto();
     }
 
+    @Override
+    public void onDestroy() {
+        BadgeManager.get(getActivity()).closeDb();
+        super.onDestroyView();
+    }
+
+
     //  TODO implement ths method to other places, onPause, add buttons onClickListener
     public void setWorkDoneAndExit() {
 //        removeNewBadgeIfNotWanted();

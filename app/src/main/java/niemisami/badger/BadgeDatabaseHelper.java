@@ -88,6 +88,7 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
         } finally{
             db.endTransaction();
+            db.close();
 
         }
         Log.i(TAG, "Badges saved to db");
@@ -132,7 +133,6 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
             badges.add(badge);
         }
         cursor.close();
-
         return badges;
     }
 }

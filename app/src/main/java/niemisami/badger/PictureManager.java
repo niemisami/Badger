@@ -65,4 +65,6 @@ public class PictureManager {
 
         imageView.setImageDrawable(null);
     }
+
+    public static void scaleDrawableForThumbnail() { }
 }
