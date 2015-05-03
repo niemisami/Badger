@@ -80,6 +80,7 @@ public class BadgeFragment extends Fragment {
         UUID badgeId = (UUID) getArguments().getSerializable(EXTRA_BADGE_ID);
         mBadge = BadgeManager.get(getActivity()).getBadge(badgeId);
 
+        setRetainInstance(true);
         setHasOptionsMenu(true);
     }
 
@@ -248,12 +249,13 @@ public class BadgeFragment extends Fragment {
             if (mBadge.getPhoto() != null) {
                 deletePhoto();
 
-            } else {
-                String filename = data.getStringExtra(CameraFragment.EXTRA_PHOTO_FILENAME);
-                if (filename != null) {
-                    mBadge.setPhoto(filename);
-                    showPhoto();
-                }
+            }
+            String filename = data.getStringExtra(CameraFragment.EXTRA_PHOTO_FILENAME);
+            if (filename != null) {
+                Log.d(TAG, filename);
+                mBadge.setPhoto(filename);
+                showPhoto();
+
             }
         }
     }
@@ -271,21 +273,22 @@ public class BadgeFragment extends Fragment {
 
     //    Photo is just String object that holds the filepath
     public void showPhoto() {
-        BitmapDrawable bitmapDrawable = null;
         String photo = mBadge.getPhoto();
+        BitmapDrawable bitmapDrawable = null;
         if (photo != null) {
             String path = getActivity().getFileStreamPath(photo).getAbsolutePath();
             bitmapDrawable = PictureManager.scaleDrawableForDisplay(getActivity(), path);
         }
+        Log.d(TAG, bitmapDrawable.toString());
         mPhotoView.setImageDrawable(bitmapDrawable);
     }
-
 
 
     @Override
     public void onPause() {
         super.onPause();
         BadgeManager.get(getActivity()).saveBadges();
+
     }
 
 //    Returns false if mNameField is empty
@@ -303,11 +306,11 @@ public class BadgeFragment extends Fragment {
 //                }
 //            }
 //        } else {
-            Toast.makeText(getActivity().getApplicationContext(), "Merkki tallennettu!", Toast.LENGTH_SHORT).show();
-            BadgeManager.get(getActivity()).saveBadges();
-            if (NavUtils.getParentActivityName(getActivity()) != null) {
-                NavUtils.navigateUpFromSameTask(getActivity());
-            }
+        Toast.makeText(getActivity().getApplicationContext(), "Merkki tallennettu!", Toast.LENGTH_SHORT).show();
+        BadgeManager.get(getActivity()).saveBadges();
+        if (NavUtils.getParentActivityName(getActivity()) != null) {
+            NavUtils.navigateUpFromSameTask(getActivity());
+        }
 //        }
     }
 

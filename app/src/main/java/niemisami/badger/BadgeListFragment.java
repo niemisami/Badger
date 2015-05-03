@@ -54,6 +54,7 @@ public class BadgeListFragment extends ListFragment {
         mBadges = receiveBadgesArray();
 
         BadgeAdapter adapter = new BadgeAdapter(mBadges);
+        setRetainInstance(true);
         setListAdapter(adapter);
 
 
