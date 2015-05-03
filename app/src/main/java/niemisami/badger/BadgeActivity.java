@@ -30,7 +30,7 @@ public class BadgeActivity extends FragmentActivity {
         mViewPager = new ViewPager(this);
         mViewPager.setId(R.id.viewPager);
         setContentView(mViewPager);
-        mBadges = BadgeManager.get(this).getBadges();
+        mBadges = BadgeManager.get(this).getBadgeArray();
 
 
         FragmentManager manager = getSupportFragmentManager();

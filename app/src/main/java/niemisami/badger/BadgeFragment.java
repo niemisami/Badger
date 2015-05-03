@@ -273,7 +273,6 @@ public class BadgeFragment extends Fragment {
             String path = getActivity().getFileStreamPath(photo).getAbsolutePath();
             bitmapDrawable = PictureManager.scaleDrawableForDisplay(getActivity(), path);
         }
-        Log.d(TAG, mBadge.getPhoto());
         mPhotoView.setImageDrawable(bitmapDrawable);
     }
 
