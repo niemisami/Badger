@@ -2,7 +2,6 @@ package niemisami.badger;
 
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,11 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -205,7 +200,7 @@ public class BadgeFragment extends Fragment {
         mAddBadgeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeNewBadgeIfNotWanted();
+                setWorkDoneAndExit();
             }
         });
 
@@ -225,12 +220,12 @@ public class BadgeFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                BadgeManager.get(getActivity()).saveBadges();
                 if (NavUtils.getParentActivityName(getActivity()) != null) {
                     NavUtils.navigateUpFromSameTask(getActivity());
                 }
-
-                removeNewBadgeIfNotWanted();
-                BadgeManager.get(getActivity()).saveBadges();
+//
+//                removeNewBadgeIfNotWanted();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -265,9 +260,8 @@ public class BadgeFragment extends Fragment {
         String photo = mBadge.getPhoto();
         PictureManager.cleanImageView(mPhotoView);
         getActivity().getFileStreamPath(photo).delete();
-
         mBadge.setPhoto(null);
-        Log.i(TAG, mBadge + "'s photo removed");
+        Log.i(TAG, mBadge.getPhoto() + "'s photo removed");
 
     }
 
@@ -279,7 +273,7 @@ public class BadgeFragment extends Fragment {
             String path = getActivity().getFileStreamPath(photo).getAbsolutePath();
             bitmapDrawable = PictureManager.scaleDrawableForDisplay(getActivity(), path);
         }
-        Log.d(TAG, bitmapDrawable.toString());
+        Log.d(TAG, mBadge.getPhoto());
         mPhotoView.setImageDrawable(bitmapDrawable);
     }
 
@@ -306,8 +300,8 @@ public class BadgeFragment extends Fragment {
 //                }
 //            }
 //        } else {
+
         Toast.makeText(getActivity().getApplicationContext(), "Merkki tallennettu!", Toast.LENGTH_SHORT).show();
-        BadgeManager.get(getActivity()).saveBadges();
         if (NavUtils.getParentActivityName(getActivity()) != null) {
             NavUtils.navigateUpFromSameTask(getActivity());
         }
@@ -329,7 +323,7 @@ public class BadgeFragment extends Fragment {
 
     //  TODO implement ths method to other places, onPause, add buttons onClickListener
     public void setWorkDoneAndExit() {
-        removeNewBadgeIfNotWanted();
+//        removeNewBadgeIfNotWanted();
         BadgeManager.get(getActivity()).saveBadges();
         if (NavUtils.getParentActivityName(getActivity()) != null) {
             NavUtils.navigateUpFromSameTask(getActivity());
