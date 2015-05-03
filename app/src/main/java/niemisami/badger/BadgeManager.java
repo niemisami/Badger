@@ -98,5 +98,12 @@ public class BadgeManager {
     public void closeDb() {
         dbHelper.close();
     }
+
+    public void deleteBadgeFromDB(Badge badge) {
+        mBadges.remove(badge);
+        dbHelper = new BadgeDatabaseHelper(mAppContext);
+        dbHelper.deleteBadge(badge.getId());
+        dbHelper.close();
+    }
 }
 

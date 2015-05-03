@@ -99,7 +99,10 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
         String[] tmpId = new String[] { badgeId.toString()};
 
         int result = db.delete(TABLE_BADGE, COLUMN_BADGE_ID + "= ? ", tmpId);
+        if(result > 0)
         Log.i(TAG, "Badge: " + badgeId + " succesfully removed from the database");
+        else
+        Log.i(TAG, "Badge removal didn't work");
         return (result > 0);
     }
 

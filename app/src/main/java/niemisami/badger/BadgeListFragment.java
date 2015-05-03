@@ -15,11 +15,17 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.LruCache;
+import android.view.ActionMode;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,28 +53,31 @@ import java.util.UUID;
 public class BadgeListFragment extends ListFragment {
 
     private String TAG = "BadgeListFragment";
+    private ArrayList<Badge> mBadges;
     private Button mNewBadgeButton;
     private TextView mBadgeListInfo;
-    private ArrayList<Badge> mBadges;
     private ThumbnailCache mThumbnailCache;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
+
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.badgeListMainTitle);
 
-//        get(..) created the BadgeManager withing it's class if run first time
-        mBadges = receiveBadgesArray();
-
-        BadgeAdapter adapter = new BadgeAdapter(mBadges);
-        setRetainInstance(true);
 
         int memClass = ((ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
         final int cacheSize = 1024 * 1024 * memClass / 8;
         mThumbnailCache = new ThumbnailCache(cacheSize);
+
+        mBadges = BadgeManager.get(getActivity()).getBadges();
+
+        BadgeAdapter adapter = new BadgeAdapter(mBadges);
         setListAdapter(adapter);
+
+        setRetainInstance(true);
 
 
     }
@@ -80,11 +89,70 @@ public class BadgeListFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
+
 
         View view = inflater.inflate(R.layout.fragment_badge_list, container, false);
 
         ListView listView = (ListView) view.findViewById(android.R.id.list);
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+//            Using floating context menus on Froo and Gingerbread
+            registerForContextMenu(listView);
+        } else {
+//            Use contextual menu for Honeycomb and higher
+//            Multiple_modal makes it possible to remove many items at once
+            listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+            listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                @Override
+                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                }
+
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    MenuInflater inflater = mode.getMenuInflater();
+                    inflater.inflate(R.menu.list_item_context, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.menu_delete_item:
+                            BadgeAdapter adapter = (BadgeAdapter) getListAdapter();
+                            BadgeManager badgeManager = BadgeManager.get(getActivity());
+
+//                            Delete items from database
+                            for (int i = adapter.getCount() - 1; i >= 0; i--) {
+                                if (getListView().isItemChecked(i)) {
+                                    badgeManager.deleteBadgeFromDB(adapter.getItem(i));
+                                }
+                            }
+                            mode.finish();
+                            countBadges();
+                            ((BadgeAdapter) getListAdapter()).clear();
+                            ((BadgeAdapter) getListAdapter()).addAll(
+                                    mBadges = BadgeManager.get(getActivity()).getBadges());
+                            ((BadgeAdapter) getListAdapter()).notifyDataSetChanged();
+
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                }
+            });
+
+
+        }
 
 //        TextView that tell to the user how many badges is saved and attached
         mBadgeListInfo = (TextView) view.findViewById(R.id.badge_list_info);
@@ -107,6 +175,30 @@ public class BadgeListFragment extends ListFragment {
         return view;
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        getActivity().getMenuInflater().inflate(R.menu.list_item_context, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = info.position;
+        BadgeAdapter adapter = (BadgeAdapter) getListAdapter();
+        Badge badge = adapter.getItem(position);
+
+        switch (item.getItemId()) {
+            case R.id.menu_delete_item:
+                BadgeManager.get(getActivity()).deleteBadgeFromDB(badge);
+                countBadges();
+                ((BadgeAdapter) getListAdapter()).clear();
+                ((BadgeAdapter) getListAdapter()).addAll(
+                        mBadges = BadgeManager.get(getActivity()).getBadges());
+                adapter.notifyDataSetChanged();
+                return true;
+        }
+        return super.onContextItemSelected(item);
+    }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -121,33 +213,41 @@ public class BadgeListFragment extends ListFragment {
 
     @Override
     public void onStart() {
+        Log.d(TAG, "onStart");
         super.onStart();
     }
 
     @Override
     public void onAttach(Activity activity) {
+        Log.d(TAG, "onAttach");
+
         super.onAttach(activity);
     }
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+
         BadgeManager.get(getActivity()).closeDb();
         super.onDestroyView();
     }
 
     @Override
     public void onPause() {
-        Log.d(TAG, "view paused");
-
+        Log.d(TAG, "onPause");
         super.onPause();
     }
 
     //    Action when back button is pressed
     @Override
     public void onResume() {
-        super.onResume();
+        Log.d(TAG, "onResume");
         countBadges();
+        ((BadgeAdapter) getListAdapter()).clear();
+        ((BadgeAdapter) getListAdapter()).addAll(
+                mBadges = BadgeManager.get(getActivity()).getBadges());
         ((BadgeAdapter) getListAdapter()).notifyDataSetChanged();
+        super.onResume();
     }
 
 
@@ -167,44 +267,44 @@ public class BadgeListFragment extends ListFragment {
     private class BadgeAdapter extends ArrayAdapter<Badge> {
         public BadgeAdapter(ArrayList<Badge> badges) {
             super(getActivity(), 0, badges);
-        }
 
+        }
 
         //        getView inflates the view by using badge_list_item layout for every item
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
                         .inflate(R.layout.badge_list_item, null);
             }
-            if (getItem(position) != null) {
-                Badge badge = getItem(position);
+            Badge badge = getItem(position);
 
-                TextView nameTextView = (TextView) convertView.findViewById(R.id.badge_list_item_nameText);
-                nameTextView.setText(badge.getName());
-                TextView dateTextView = (TextView) convertView.findViewById(R.id.badge_list_item_dateTextView);
-                //          getDate() will return time in shitty form
-                String formattedTime = formatDate(badge);
-                dateTextView.setText(formattedTime);
+            TextView nameTextView = (TextView) convertView.findViewById(R.id.badge_list_item_nameText);
+            nameTextView.setText(badge.getName());
+            TextView dateTextView = (TextView) convertView.findViewById(R.id.badge_list_item_dateTextView);
+            //          getDate() will return time in shitty form
+            String formattedTime = formatDate(badge);
+            dateTextView.setText(formattedTime);
 
-                CheckBox attachedCheckBox = (CheckBox) convertView.findViewById(R.id.badge_list_item_attachedCheckBox);
-                attachedCheckBox.setChecked(badge.getIsAttached());
+            CheckBox attachedCheckBox = (CheckBox) convertView.findViewById(R.id.badge_list_item_attachedCheckBox);
+            attachedCheckBox.setChecked(badge.getIsAttached());
 
-                ImageView badgeThumbnail = (ImageView) convertView.findViewById(R.id.badge_list_item_image);
-                String photo = badge.getPhoto();
+            ImageView badgeThumbnail = (ImageView) convertView.findViewById(R.id.badge_list_item_image);
+            String photo = badge.getPhoto();
 
 
-                if (photo != null) {
-                    if (mThumbnailCache.get(photo) != null) {
-                        badgeThumbnail.setImageBitmap(mThumbnailCache.get(photo));
-                    } else {
-                        Bitmap thumbnail = createThumbnail(photo);
-                        badgeThumbnail.setImageBitmap(thumbnail);
-                        mThumbnailCache.put(photo, thumbnail);
-                    }
+            if (photo != null) {
+                if (mThumbnailCache.get(photo) != null) {
+                    badgeThumbnail.setImageBitmap(mThumbnailCache.get(photo));
+                } else {
+                    Bitmap thumbnail = createThumbnail(photo);
+                    badgeThumbnail.setImageBitmap(thumbnail);
+                    mThumbnailCache.put(photo, thumbnail);
                 }
-
             }
+
+
             return convertView;
 
         }
@@ -216,7 +316,6 @@ public class BadgeListFragment extends ListFragment {
             if (!path.isEmpty()) {
                 thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path), 64, 64);
             }
-
             return thumbnail;
 
         }
