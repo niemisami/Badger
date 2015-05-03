@@ -26,6 +26,7 @@
         </activity>
         <activity
             android:name=".CameraActivity"
+            android:screenOrientation="landscape"
             android:label="@string/title_activity_camera" >
         </activity>
     </application>

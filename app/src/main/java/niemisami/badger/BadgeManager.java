@@ -72,6 +72,10 @@ public class BadgeManager {
         return mBadges;
     }
 
+    public ArrayList<Badge> getBadgeArray() {
+        return mBadges;
+    }
+
     public boolean saveBadges() {
         dbHelper.saveBadgesToDb(mBadges);
         return false;

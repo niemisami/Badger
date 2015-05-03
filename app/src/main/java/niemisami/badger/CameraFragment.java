@@ -37,10 +37,9 @@ public class CameraFragment extends Fragment {
     private Camera mCamera;
     private SurfaceView mViewFinder;
     private ImageButton mPhotoButton;
-    private View mProgresSpinner;
+    private View mProgressSpinner;
 
     public static final String EXTRA_PHOTO_FILENAME = "niemisami.badger.photo_filename";
-
 
     public CameraFragment() {
     }
@@ -52,8 +51,8 @@ public class CameraFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
 
-        mProgresSpinner = view.findViewById(R.id.camera_progressContainer);
-        mProgresSpinner.setVisibility(View.INVISIBLE);
+        mProgressSpinner = view.findViewById(R.id.camera_progressContainer);
+        mProgressSpinner.setVisibility(View.INVISIBLE);
 
         mPhotoButton = (ImageButton) view.findViewById(R.id.camera_takeImage);
         mPhotoButton.setOnClickListener(new View.OnClickListener() {
@@ -82,9 +81,7 @@ public class CameraFragment extends Fragment {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                mCamera.setDisplayOrientation(90);
 
-                mCamera.setDisplayOrientation(getResources().getConfiguration().getLayoutDirection());
                 if (mCamera == null)
                     return;
                 Camera.Parameters parameters = mCamera.getParameters();
@@ -117,7 +114,7 @@ public class CameraFragment extends Fragment {
     private Camera.ShutterCallback mShutterCallback = new Camera.ShutterCallback() {
         @Override
         public void onShutter() {
-            mProgresSpinner.setVisibility(View.VISIBLE);
+            mProgressSpinner.setVisibility(View.VISIBLE);
         }
     };
 
@@ -133,7 +130,7 @@ public class CameraFragment extends Fragment {
             boolean success = true;
 
             try {
-//            MODE_PRIVATE so photos can be called only this app
+//            MODE_PRIVATE so photos can be called only in this app
                 os = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
                 os.write(data);
             } catch (Exception e) {
@@ -154,10 +151,11 @@ public class CameraFragment extends Fragment {
             if (success) {
                 Intent i = new Intent();
                 i.putExtra(EXTRA_PHOTO_FILENAME, filename);
-                getActivity().setResult(Activity.RESULT_OK);
+                getActivity().setResult(Activity.RESULT_OK, i);
             } else {
                 getActivity().setResult(Activity.RESULT_CANCELED);
             }
+
             getActivity().finish();
         }
     };
@@ -165,8 +163,9 @@ public class CameraFragment extends Fragment {
     private Size getBestSupportedSize(List<Size> sizes, int width, int height) {
         Size bestSize = sizes.get(0);
         int largestArea = bestSize.width * bestSize.height;
+
         for (Size s : sizes) {
-            int area = width * height;
+            int area = s.width * s.height;
             if (area > largestArea) {
                 bestSize = s;
                 largestArea = area;
@@ -190,7 +189,6 @@ public class CameraFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
         if (mCamera != null) {
             mCamera.release();
             mCamera = null;

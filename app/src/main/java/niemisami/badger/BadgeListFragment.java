@@ -70,7 +70,7 @@ public class BadgeListFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_badge_list, container, false);
 
         ListView listView = (ListView) view.findViewById(android.R.id.list);
-//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
 //        TextView that tell to the user how many badges is saved and attached
         mBadgeListInfo = (TextView) view.findViewById(R.id.badge_list_info);
@@ -81,6 +81,7 @@ public class BadgeListFragment extends ListFragment {
         mNewBadgeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Badge badge = new Badge();
                 BadgeManager.get((getActivity())).addBadge(badge);
 
@@ -204,7 +205,6 @@ public class BadgeListFragment extends ListFragment {
                 attachedCount++;
         }
 
-        Log.d(TAG, "new attach count " + attachedCount);
         String infoText = mBadgeListInfo.getText().toString();
 
 //        chars # and % are found in @string resource and method replaces them with integers

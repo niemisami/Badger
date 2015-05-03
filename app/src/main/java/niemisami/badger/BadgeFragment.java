@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class BadgeFragment extends Fragment {
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_PHOTO = 1;
     private static final String DIALOG_DATE = "date";
+    private static final String DIALOG_IMAGE = "image";
 
     public BadgeFragment() {
     }
@@ -95,7 +97,13 @@ public class BadgeFragment extends Fragment {
 
 //       Badge's name
         mNameField = (EditText) view.findViewById(R.id.badgeName_editText);
-        mNameField.setText(mBadge.getName());
+        try {
+            mNameField.setText(mBadge.getName());
+
+        } catch (NullPointerException e) {
+            Log.e(TAG, "No name", e);
+            mNameField.setText("");
+        }
         mNameField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -129,6 +137,21 @@ public class BadgeFragment extends Fragment {
             mPhotoButton.setEnabled(false);
         }
 
+
+//        ImageView for showing photo of the badge
+        mPhotoView = (ImageView) view.findViewById(R.id.badge_imageView);
+        mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String photo = mBadge.getPhoto();
+                if (photo == null) {
+                    return;
+                }
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                String path = getActivity().getFileStreamPath(photo).getAbsolutePath();
+                ImageFragment.newInstance(path).show(manager, DIALOG_IMAGE);
+            }
+        });
 //        Button to show calendar for the user
         mDateButton = (Button) view.findViewById(R.id.badgeDate_button);
         updateDate();
@@ -181,22 +204,7 @@ public class BadgeFragment extends Fragment {
         mAddBadgeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(mNameField.getText().toString())) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Merkkiä ei tallennettu! Kirjoita nimi", Toast.LENGTH_SHORT).show();
-                    for (int i = 0; i < BadgeManager.get(getActivity()).getBadges().size(); i++) {
-                        if (BadgeManager.get(getActivity()).getBadges().get(i).getId() == mBadge.getId()) {
-                            BadgeManager.get(getActivity()).getBadges().remove(i);
-                        }
-                    }
-                } else{
-                    Log.v(TAG, "onPause called and item saved");
-                    Toast.makeText(getActivity().getApplicationContext(), "Merkki tallennettu!", Toast.LENGTH_SHORT).show();
-                    if (NavUtils.getParentActivityName(getActivity()) != null) {
-                        NavUtils.navigateUpFromSameTask(getActivity());
-                    }
-
-                    BadgeManager.get(getActivity()).saveBadges();
-                }
+                removeNewBadgeIfNotWanted();
             }
         });
 
@@ -211,15 +219,6 @@ public class BadgeFragment extends Fragment {
         mDateButton.setText(parsedDate);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) return;
-        if (requestCode == REQUEST_DATE) {
-            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-            mBadge.setDate(date);
-            updateDate();
-
-        }
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -229,6 +228,7 @@ public class BadgeFragment extends Fragment {
                     NavUtils.navigateUpFromSameTask(getActivity());
                 }
 
+                removeNewBadgeIfNotWanted();
                 BadgeManager.get(getActivity()).saveBadges();
                 return true;
             default:
@@ -236,25 +236,79 @@ public class BadgeFragment extends Fragment {
         }
     }
 
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+        if (requestCode == REQUEST_DATE) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mBadge.setDate(date);
+            updateDate();
+        } else if (requestCode == REQUEST_PHOTO) {
+            Log.d(TAG, "Ensimmäinen else");
+            if (mBadge.getPhoto() != null) {
+                deletePhoto();
+
+            } else {
+                String filename = data.getStringExtra(CameraFragment.EXTRA_PHOTO_FILENAME);
+                if (filename != null) {
+                    mBadge.setPhoto(filename);
+                    showPhoto();
+                }
+            }
+        }
+    }
+
+
+    public void deletePhoto() {
+        String photo = mBadge.getPhoto();
+        PictureManager.cleanImageView(mPhotoView);
+        getActivity().getFileStreamPath(photo).delete();
+
+        mBadge.setPhoto(null);
+        Log.i(TAG, mBadge + "'s photo removed");
+
+    }
+
+    //    Photo is just String object that holds the filepath
+    public void showPhoto() {
+        BitmapDrawable bitmapDrawable = null;
+        String photo = mBadge.getPhoto();
+        if (photo != null) {
+            String path = getActivity().getFileStreamPath(photo).getAbsolutePath();
+            bitmapDrawable = PictureManager.scaleDrawableForDisplay(getActivity(), path);
+        }
+        mPhotoView.setImageDrawable(bitmapDrawable);
+    }
+
+
+
     @Override
     public void onPause() {
         super.onPause();
+        BadgeManager.get(getActivity()).saveBadges();
+    }
 
+//    Returns false if mNameField is empty
 
-//        This is for debugging and will be handled somewhere else
-        if (!mNameField.getText().toString().matches("")) {
-            Log.v(TAG, "onPause called and item saved");
-            BadgeManager.get(getActivity()).saveBadges();
+    private boolean isNameFieldFilled() {
+        return !TextUtils.isEmpty(mNameField.getText().toString());
+    }
+
+    private void removeNewBadgeIfNotWanted() {
+//        if (!isNameFieldFilled()) {
+//            Toast.makeText(getActivity().getApplicationContext(), "Merkkiä ei tallennettu! Kirjoita nimi", Toast.LENGTH_SHORT).show();
+//            for (int i = 0; i < BadgeManager.get(getActivity()).getBadgeArray().size(); i++) {
+//                if (BadgeManager.get(getActivity()).getBadgeArray().get(i).getId() == mBadge.getId()) {
+//                    BadgeManager.get(getActivity()).getBadgeArray().remove(i);
+//                }
+//            }
+//        } else {
             Toast.makeText(getActivity().getApplicationContext(), "Merkki tallennettu!", Toast.LENGTH_SHORT).show();
-
-        } else {
-            for (int i = 0; i < BadgeManager.get(getActivity()).getBadges().size(); i++) {
-                if (BadgeManager.get(getActivity()).getBadges().get(i).getId() == mBadge.getId()) {
-                    BadgeManager.get(getActivity()).getBadges().remove(i);
-                }
+            BadgeManager.get(getActivity()).saveBadges();
+            if (NavUtils.getParentActivityName(getActivity()) != null) {
+                NavUtils.navigateUpFromSameTask(getActivity());
             }
-            Toast.makeText(getActivity().getApplicationContext(), "Merkkiä ei tallennettu!", Toast.LENGTH_SHORT).show();
-        }
+//        }
     }
 
 
@@ -264,13 +318,24 @@ public class BadgeFragment extends Fragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        showPhoto();
+    }
+
     //  TODO implement ths method to other places, onPause, add buttons onClickListener
     public void setWorkDoneAndExit() {
+        removeNewBadgeIfNotWanted();
         BadgeManager.get(getActivity()).saveBadges();
-
         if (NavUtils.getParentActivityName(getActivity()) != null) {
             NavUtils.navigateUpFromSameTask(getActivity());
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
     }
 }

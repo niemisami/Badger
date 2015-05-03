@@ -1,12 +1,16 @@
 package niemisami.badger;
 
+import android.os.IInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 
@@ -14,24 +18,60 @@ public class BadgeActivity extends FragmentActivity {
 
     private final String TAG = "BadgerActivity";
 
+    //    ViewPager allows swipe right or left to view other badges
+    private ViewPager mViewPager;
+    private ArrayList<Badge> mBadges;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
+
+        mViewPager = new ViewPager(this);
+        mViewPager.setId(R.id.viewPager);
+        setContentView(mViewPager);
+        mBadges = BadgeManager.get(this).getBadges();
+
+
         FragmentManager manager = getSupportFragmentManager();
-        Fragment fragment = manager.findFragmentById(R.id.fragmentContainer);
+        mViewPager.setAdapter(new FragmentStatePagerAdapter(manager) {
+            @Override
+            public Fragment getItem(int position) {
 
+                Badge badge = mBadges.get(position);
+                return BadgeFragment.newInstance(badge.getId());
+            }
 
+            @Override
+            public int getCount() {
+                return mBadges.size();
+            }
+        });
+
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+//
         overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
 
+        UUID badgeId = (UUID)getIntent().getSerializableExtra(BadgeFragment.EXTRA_BADGE_ID);
+        for (int i = 0; i < mBadges.size(); i++) {
 
-        if (fragment == null) {
-            UUID badgeId = (UUID) getIntent().getSerializableExtra(BadgeFragment.EXTRA_BADGE_ID);
-            fragment = BadgeFragment.newInstance(badgeId);
-            manager.beginTransaction()
-                    .add(R.id.fragmentContainer, fragment)
-                    .commit();
+            if (mBadges.get(i).getId().equals(badgeId)) {
+                mViewPager.setCurrentItem(i);
+                break;
+            }
         }
     }
 
@@ -47,9 +87,5 @@ public class BadgeActivity extends FragmentActivity {
 
 
         overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
-    }
-
-    private Fragment createFragment() {
-        return new BadgeFragment();
     }
 }

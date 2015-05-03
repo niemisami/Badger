@@ -34,7 +34,6 @@ public class CameraActivity extends FragmentActivity {
         Fragment fragment = manager.findFragmentById(R.id.fragmentContainer);
 
         if(fragment == null){
-            UUID badgeId = (UUID)getIntent().getSerializableExtra(BadgeFragment.EXTRA_BADGE_ID);
             fragment = createFragment();
             manager.beginTransaction()
                     .add(R.id.fragmentContainer, fragment)
