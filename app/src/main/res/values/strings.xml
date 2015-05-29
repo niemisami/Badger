@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!-- MainFragment -->
+<!-- BadgeListFragment -->
     <string name="app_name">Badger</string>
-    <string name="mainName">Merkkisäilö</string>
+    <string name="badgeListMainTitle">BADGER</string>
     <string name="newBadgeButton">+</string>
     <string name="addNewBadgeButton">Lisää</string>
     <string name="archiveButton">Arkisto</string>
-   
-    <string name="newBadgeHead">Tallenna uusi merkki</string>
+    <string name="empty_list">Listallasi ei ole yhtään merkkiä!\nLisääppäs!</string>
+    <string name="delete_items">Poista merkkejä</string>
+
+
+
+    <string name="listBadgeInfo">Sinulla on # merkkiä, joista kiinni % </string>
+    <string name="newBadgeTitle">Tallenna uusi merkki</string>
     <string name="newBadgeName">Nimi</string>
     <string name="newBadgeTime">Aika</string>
     <string name="newBadgePlace">Paikka</string>
     <string name="newBadgeInfo">Lisätiedot</string>
     <string name="newBadgeImage">Ota kuva</string>
-    <string name="newBadgePrice">Hint</string>
+    <string name="newBadgeAttached">Kiinnitetty</string>
+
+    <string name="newBadgeTitleHint">Kirjoita merkin nimi</string>
+    <string name="newBadgeInfoHint">Lisätietoa merkistä</string>
 
 
-<!--   <string-array name="listItems">
-    	<item>Nimi</item>
-    	<item>Aika</item>
-    	<item>Paikka</item>
-    	<item>Hinta</item>
-    	<item>Lisätiedot</item>
-    	<item>Kuva</item>
-    </string-array> --> 
-
-    <string name="list_item1">Nimi</string>
-	<string name="list_item2">Aika</string>
-    <string name="list_item3">Paikka</string>
-    <string name="list_item4">Hinta</string>
-    <string name="list_item5">Lisätiedot</string>
-	<string name="list_item6">Kuva</string>
    
 <!-- BadgeFragment -->
     <string name="badgeFragHead">Tallenna</string>
     <string name="cancelButton">Peruuta</string>
+
+    <string name= "BadgeMainTitle">Lisää merkki</string>
 
 
 
@@ -43,6 +38,14 @@
 <!-- ArchiveFragment -->
     <string name="archiveFragHead">Arkisto</string>
     <string name="returnButton">Paluu</string>
+    <string name="title_activity_badge">BadgeActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_camera">CameraActivity</string>
 
 
 </resources>

@@ -36,7 +36,6 @@
     				style="?android:attr/buttonBarButtonStyle" 
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
-                    android:text="@string/list_item1"
                     android:textSize="12sp"
                     android:layout_margin="1dp"
                     android:background="#8df" />
@@ -44,7 +43,6 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
-                    android:text="@string/list_item2"
                     android:textSize="12sp"
                     android:layout_margin="1dp"
                     android:background="#8df" />
@@ -52,7 +50,6 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
-                    android:text="@string/list_item3"
                     android:textSize="12sp"
                     android:layout_margin="1dp"
                     android:background="#8df" />
@@ -60,7 +57,6 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
-                    android:text="@string/list_item4"
                     android:textSize="12sp"
                     android:layout_margin="1dp"
                     android:background="#8df" />
@@ -69,7 +65,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:background="#8df"
-                    android:text="@string/list_item5"
                     android:textSize="12sp"
                     android:layout_margin="1dp"
                     android:width="24dip" />
