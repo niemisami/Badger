@@ -3,11 +3,12 @@
 
 <!-- BadgeListFragment -->
     <string name="app_name">Badger</string>
-    <string name="badgeListMainTitle">Merkkisäilö</string>
+
+    <string name="badgeListMainTitle">BADGER</string>
     <string name="newBadgeButton">+</string>
     <string name="addNewBadgeButton">Lisää</string>
     <string name="archiveButton">Arkisto</string>
-    <string name="empty_list">Sinulla ei ole yhtään merkkiä\nLisääppäs!</string>
+    <string name="empty_list">Listallasi ei ole yhtään merkkiä!\nLisääppäs!</string>
     <string name="delete_items">Poista merkkejä</string>
 
 
@@ -29,6 +30,8 @@
 <!-- BadgeFragment -->
     <string name="badgeFragHead">Tallenna</string>
     <string name="cancelButton">Peruuta</string>
+
+    <string name= "BadgeMainTitle">Lisää merkki</string>
 
 
 

@@ -72,6 +72,10 @@ public class BadgeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        getActivity().setTitle(R.string.BadgeMainTitle);
+
         UUID badgeId = (UUID) getArguments().getSerializable(EXTRA_BADGE_ID);
         mBadge = BadgeManager.get(getActivity()).getBadge(badgeId);
 

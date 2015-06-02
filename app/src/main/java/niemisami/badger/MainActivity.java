@@ -45,6 +45,5 @@ public class MainActivity extends FragmentActivity {
         Log.d(TAG, "on back pressed jossain");
         super.onBackPressed();
 
-        overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
     }
 }

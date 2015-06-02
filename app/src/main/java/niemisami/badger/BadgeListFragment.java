@@ -6,16 +6,20 @@ package niemisami.badger;
  * and provides many useful functions
  */
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.ActionMode;
@@ -40,6 +44,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
+
+
+
 public class BadgeListFragment extends ListFragment {
 
     private String TAG = "BadgeListFragment";
@@ -55,7 +62,20 @@ public class BadgeListFragment extends ListFragment {
         Log.d(TAG, "onCreate");
 
         setHasOptionsMenu(true);
-        getActivity().setTitle(R.string.badgeListMainTitle);
+
+        //otsikkofonttijuttuja
+        SpannableString s = new SpannableString("BADGER");
+        Typeface CustomFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/LAIKA.ttf");
+        s.setSpan(CustomFont, 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        //SpannableString s = new SpannableString("BADGER");
+        //s.setSpan(new niemisami.badger.TypefaceSpan(getActivity(), "fonts/LAIKA.otf"), 0, s.length(),
+        //        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        ActionBar actionBar = getActivity().getActionBar();
+        actionBar.setTitle(s);
+
+        //getActivity().setTitle(R.string.badgeListMainTitle);
 
 
         int memClass = ((ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();

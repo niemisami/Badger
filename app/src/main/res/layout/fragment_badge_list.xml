@@ -8,20 +8,22 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-    <TextView
+
+    <niemisami.badger.CustomText2
         android:id="@+id/badge_list_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
         android:layout_margin="15dp"
+
+        android:textSize="20sp"
         android:text="@string/listBadgeInfo" />
 
     <ListView
         android:layout_below="@id/badge_list_info"
         android:id="@id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        android:layout_height="wrap_content"></ListView>
 
     </RelativeLayout>
 
@@ -46,10 +48,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+
+        <niemisami.badger.CustomText2
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textSize="40sp"
             android:text="@string/empty_list" />
     </FrameLayout>
 
