@@ -20,7 +20,8 @@
         android:layout_below="@id/badge_list_info"
         android:id="@id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content">
+    </ListView>
 
     </RelativeLayout>
 

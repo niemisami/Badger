@@ -12,42 +12,32 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
-import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.ActionMode;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
 
 
 public class BadgeListFragment extends ListFragment {
