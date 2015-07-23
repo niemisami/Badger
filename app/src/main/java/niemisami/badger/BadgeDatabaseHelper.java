@@ -50,8 +50,6 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
                         + COLUMN_BADGE_ATTACHED + " BOOLEAN DEFAULT FALSE, "
                         + COLUMN_BADGE_EXTRA + " STRING, "
                         + COLUMN_BADGE_PHOTO_PATH + " STRING)");
-
-        Log.e(TAG, "LUOKO SE UUTTA");
     }
 
     @Override
@@ -120,7 +118,6 @@ public class BadgeDatabaseHelper extends SQLiteOpenHelper {
 
             String dateString = cursor.getString(cursor.getColumnIndex(COLUMN_BADGE_DATE));
             DateFormat formatOfDate = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy");
-//            Log.d(TAG, dateString + "EEE MMM dd hh:mm:ss zzz yyyy");
             try {
                 Date date = formatOfDate.parse(dateString);
 //                Log.d(TAG, date.toString());

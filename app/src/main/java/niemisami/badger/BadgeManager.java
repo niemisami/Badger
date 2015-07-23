@@ -86,7 +86,6 @@ public class BadgeManager {
         ArrayList<Badge> badges = new ArrayList<>();
         try {
             badges = dbHelper.getBadgesFromDb();
-//            Log.d(TAG, Integer.toString(mBadges.size()) + " amount of badges from db");
         } catch (SQLDataException e) {
             Log.e(TAG, "Error loading from database: ", e);
         }

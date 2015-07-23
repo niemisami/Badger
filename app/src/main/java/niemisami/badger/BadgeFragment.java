@@ -244,7 +244,6 @@ public class BadgeFragment extends Fragment {
             mBadge.setDate(date);
             updateDate();
         } else if (requestCode == REQUEST_PHOTO) {
-            Log.d(TAG, "Ensimmäinen else");
             if (mBadge.getPhoto() != null) {
                 deletePhoto();
 

@@ -91,10 +91,7 @@ public class BadgeListFragment extends ListFragment {
 
 
     }
-//    @Override
-//    public void onListItemClick(ListView listView, View view, int position, long id) {
-//        Log.d(TAG, getListAdapter().getItem(position));
-//    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

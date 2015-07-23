@@ -1,10 +1,11 @@
 package niemisami.badger;
 
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.Menu;
 
 
 public class MainActivity extends FragmentActivity {
@@ -24,7 +25,7 @@ public class MainActivity extends FragmentActivity {
         Fragment fragment = manager.findFragmentById(R.id.fragmentContainer);
 
 
-        overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
+        overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_fade_out);
 
 
         if (fragment == null) {
@@ -42,8 +43,14 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "on back pressed jossain");
+        Log.d(TAG, "on back pressed");
         super.onBackPressed();
-
     }
-}
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }}
